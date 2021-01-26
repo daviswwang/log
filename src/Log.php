@@ -75,21 +75,21 @@ class Log
         //一些路由结果，路由结果参数
 
         $data[] = "## 路由参数\n";
-        $Params = $request->header();
-        $data[] = " - Header请求参数:\t\t\n";
-        if (!empty($Params)) {
-            foreach ($Params as $k => $v) {
-                if (is_array($v)) {
-                    $data[] = " \t\t- {$k}中参数:\t\t\n";
-                    foreach ($v as $kk => $item) {
-                        if (is_array($item)) $item = json_encode($item, JSON_UNESCAPED_UNICODE);
-                        $data[] = "\t\t\t\t- {$kk}\t{$item}\n";
-                    }
-                } else {
-                    $data[] = "- {$k}\t{$v}\n";
-                }
-            }
-        }
+//        $Params = $request->header();
+//        $data[] = " - Header请求参数:\t\t\n";
+//        if (!empty($Params)) {
+//            foreach ($Params as $k => $v) {
+//                if (is_array($v)) {
+//                    $data[] = " \t\t- {$k}中参数:\t\t\n";
+//                    foreach ($v as $kk => $item) {
+//                        if (is_array($item)) $item = json_encode($item, JSON_UNESCAPED_UNICODE);
+//                        $data[] = "\t\t\t\t- {$kk}\t{$item}\n";
+//                    }
+//                } else {
+//                    $data[] = "- {$k}\t{$v}\n";
+//                }
+//            }
+//        }
 
         $data[] = "## 路由参数\n";
         $Params = $request->all();
