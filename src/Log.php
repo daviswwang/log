@@ -13,8 +13,8 @@ namespace Daviswwang\Log;
 class Log
 {
 
-    public $starTime;
-    public $starMemory;
+    public static $starTime;
+    public static $starMemory;
     public static $debug = [];
     public static $mysqlDebug = [];
     public static $fileName = null;
@@ -22,8 +22,8 @@ class Log
 
     public function __construct()
     {
-        $this->starTime = microtime(true);
-        $this->starMemory = memory_get_usage();
+        self::$starTime = microtime(true);
+        self::$starMemory = memory_get_usage();
     }
 
     public static function add_debug(array $params)
@@ -45,7 +45,7 @@ class Log
         }
 
         list($s, $c) = explode('.', microtime(true) . '.0');
-        self::$fileName = $filePath . '/' . $userId . '_'  . mt_rand(100, 999) . '.md';
+        self::$fileName = $filePath . '/' . $userId . '_' . mt_rand(100, 999) . '.md';
 
     }
 
@@ -111,7 +111,7 @@ class Log
         //执行时间 内存消耗
         $data[] = "## 执行时间 内存消耗\n```\n";
         $time = sprintf('% 9.3f', (microtime(true) - self::$starTime) * 1000);
-        $memo = sprintf('% 9.3f', (memory_get_usage() - self::$starMoney) / 1024);
+        $memo = sprintf('% 9.3f', (memory_get_usage() - self::$starMemory) / 1024);
         $total = sprintf('% 9.3f', (memory_get_usage()) / 1024);
         $data[] = "\t\tuTime\tuMem\t\ttMem\t\n";
         $data[] = "  {$time}\t{$memo}\t{$total}\t\n```\n";
