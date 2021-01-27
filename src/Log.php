@@ -173,6 +173,10 @@ class Log
 
         $data[] = "\n";
 
+        var_dump(self::$fileName);
+
+        var_dump($data);
+
         file_put_contents(self::$fileName, $data, LOCK_EX);
     }
 }
