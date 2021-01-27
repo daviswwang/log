@@ -13,30 +13,30 @@ namespace Daviswwang\Log;
 class Log
 {
 
-    public static $starTime;
-    public static $starMemory;
-    public static $debug = [];
-    public static $mysqlDebug = [];
-    public static $fileName = null;
+    public $starTime;
+    public $starMemory;
+    public $fileName = null;
+    public $debug = [];
+    public $mysqlDebug = [];
 
 
     public function __construct()
     {
-        self::$starTime = microtime(true);
-        self::$starMemory = memory_get_usage();
+        $this->starTime = microtime(true);
+        $this->starMemory = memory_get_usage();
     }
 
-    public static function add_debug(array $params)
+    public function add_debug(array $params)
     {
-        array_push(self::$debug, $params);
+        array_push($this->debug, $params);
     }
 
-    public static function add_mysqlDebug(array $params)
+    public function add_mysqlDebug(array $params)
     {
-        array_push(self::$mysqlDebug, $params);
+        array_push($this->mysqlDebug, $params);
     }
 
-    public static function set_fileName($shopCode, $userId)
+    public function set_fileName($shopCode, $userId)
     {
         $filePath = BASE_PATH . '/runtime/logs/' . date('Y-m-d') . '/' . $shopCode;
 
@@ -44,7 +44,7 @@ class Log
             mkdir($filePath, 755, true);
         }
 
-        self::$fileName = $filePath . '/' . $userId . '_' . date('H:i:s') . '_' . mt_rand(100, 999) . '.md';
+        $this->fileName = $filePath . '/' . $userId . '_' . date('H:i:s') . '_' . mt_rand(100, 999) . '.md';
 
     }
 
@@ -54,10 +54,10 @@ class Log
      * @param  $request
      * @param array $response
      */
-    public static function save_log($request, $response = [])
+    public  function save_log($request, $response = [])
     {
 
-        if (!self::$fileName || !self::$debug) return;
+        if (!$this->fileName || !$this->debug) return;
 
         $data = [];
         $data[] = "## 请求数据\n";
@@ -109,18 +109,18 @@ class Log
 
         //执行时间 内存消耗
         $data[] = "## 执行时间 内存消耗\n```\n";
-        $time = sprintf('% 9.3f', (microtime(true) - self::$starTime) * 1000);
-        $memo = sprintf('% 9.3f', (memory_get_usage() - self::$starMemory) / 1024);
+        $time = sprintf('% 9.3f', (microtime(true) - $this->starTime) * 1000);
+        $memo = sprintf('% 9.3f', (memory_get_usage() - $this->starMemory) / 1024);
         $total = sprintf('% 9.3f', (memory_get_usage()) / 1024);
         $data[] = "\t\tuTime\tuMem\t\ttMem\t\n";
         $data[] = "  {$time}\t{$memo}\t{$total}\t\n```\n";
 
 
-        if (count(self::$mysqlDebug)) {
+        if (count($this->mysqlDebug)) {
             $slow = [];
             $data[] = "\n## Mysql 顺序：\n";
-            $data[] = " - 当前共执行MYSQL：\t" . count(self::$mysqlDebug) . " 次\n";
-            foreach (self::$mysqlDebug as $i => $value) {
+            $data[] = " - 当前共执行MYSQL：\t" . count($this->mysqlDebug) . " 次\n";
+            foreach ($this->mysqlDebug as $i => $value) {
                 $data[] = "\t\t执行时间\t:" . ($value['time']) . "\n";
                 $data[] = "\t\tsql\t:" . ($value['sql'] ?? '') . "\n";
                 $data[] = "\t\tbind参数\t :" . json_encode($value['parmars']) . "\n";
@@ -131,7 +131,7 @@ class Log
         //程序执行顺序
         $data[] = "## 程序执行顺序\n```\n";
 
-        foreach (self::$debug as $value) {
+        foreach ($this->debug as $value) {
             $data[] = "\t\t文件位置:" . ($value[0] ?? '') . "\n";
             $data[] = "\t\t行数:" . ($value[1] ?? '') . "\n";
             $data[] = "\t\t描述:" . ($value[2] ?? '') . "\n";
@@ -172,6 +172,6 @@ class Log
 
         $data[] = "\n";
 
-        file_put_contents(self::$fileName, $data, LOCK_EX);
+        file_put_contents($this->fileName, $data, LOCK_EX);
     }
 }
