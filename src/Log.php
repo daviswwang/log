@@ -38,14 +38,14 @@ class Log
 
     public static function set_fileName($shopCode, $userId)
     {
-        $filePath = BASE_PATH . 'runtime/logs/' . $shopCode;
+        $filePath = BASE_PATH . '/runtime/logs/' . $shopCode;
 
         if (!file_exists($filePath)) {
             mkdir($filePath, 755, true);
         }
 
         list($s, $c) = explode('.', microtime(true) . '.0');
-        self::$fileName = $filePath . '/' . $userId . '_' . mt_rand(100, 999) . '.md';
+        self::$fileName = $filePath . '/' . $userId . '_' . (date('H_i_s', $s) . "_{$s}_{$c}_" . mt_rand(100, 999)) . '.md';
 
     }
 
