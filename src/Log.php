@@ -54,7 +54,7 @@ class Log
      * @param  $request
      * @param array $response
      */
-    public  function save_log($request, $response = [])
+    public function save_log($request, $response = [])
     {
 
         if (!$this->fileName || !$this->debug) return;
@@ -173,5 +173,6 @@ class Log
         $data[] = "\n";
 
         file_put_contents($this->fileName, $data, LOCK_EX);
+        $data = [];
     }
 }
