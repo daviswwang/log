@@ -49,8 +49,7 @@ class Log
             mkdir($filePath, 755, true);
         }
 
-        $this->fileName = $filePath . '/' . $userId . '_' . date('H:i:s') . '_' . mt_rand(100, 999) . '.md';
-
+        $this->fileName = $filePath . '/' . $userId . '_' . date('H-i-s') . '_' . mt_rand(100, 999) . '.md';
     }
 
 
