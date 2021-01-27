@@ -28,14 +28,14 @@ class Log
 
     public function add_debug(array $params)
     {
-        $debug = Context::get('add_debug');
+        $debug = Context::get('add_debug') ?: [];
         array_push($debug, $params);
         Context::set('add_debug', $debug);
     }
 
     public function add_mysqlDebug(array $params)
     {
-        $mysqlDebug = Context::get('add_mysqlDebug');
+        $mysqlDebug = Context::get('add_mysqlDebug') ?: [];
         array_push($mysqlDebug, $params);
         Context::set('add_mysqlDebug', $mysqlDebug);
 
