@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace Daviswwang\Log;
 
+use Hyperf\Utils\Context;
+
 class Log
 {
 
     public $starTime;
     public $starMemory;
     public $fileName = null;
-    public $debug = [];
-    public $mysqlDebug = [];
 
 
     public function __construct()
@@ -28,12 +28,17 @@ class Log
 
     public function add_debug(array $params)
     {
-        array_push($this->debug, $params);
+        $debug = Context::get('add_debug');
+        array_push($debug, $params);
+        Context::set('add_debug', $debug);
     }
 
     public function add_mysqlDebug(array $params)
     {
-        array_push($this->mysqlDebug, $params);
+        $mysqlDebug = Context::get('add_mysqlDebug');
+        array_push($mysqlDebug, $params);
+        Context::set('add_mysqlDebug', $mysqlDebug);
+
     }
 
     public function set_fileName($shopCode, $userId)
@@ -56,8 +61,10 @@ class Log
      */
     public function save_log($request, $response = [])
     {
+        $debug = Context::get('add_debug');
+        $mysqlDebug = Context::get('add_mysqlDebug');
 
-        if (!$this->fileName || !$this->debug) return;
+        if (!$this->fileName || !$debug) return;
 
         $data = [];
         $data[] = "## 请求数据\n";
@@ -116,14 +123,14 @@ class Log
         $data[] = "  {$time}\t{$memo}\t{$total}\t\n```\n";
 
 
-        if (count($this->mysqlDebug)) {
+        if (count($mysqlDebug)) {
             $slow = [];
             $data[] = "\n## Mysql 顺序：\n";
-            $data[] = " - 当前共执行MYSQL：\t" . count($this->mysqlDebug) . " 次\n";
-            foreach ($this->mysqlDebug as $i => $value) {
+            $data[] = " - 当前共执行MYSQL：\t" . count($mysqlDebug) . " 次\n";
+            foreach ($mysqlDebug as $i => $value) {
                 $data[] = "\t\t执行时间\t:" . ($value['time']) . "\n";
                 $data[] = "\t\tsql\t:" . ($value['sql'] ?? '') . "\n";
-                $data[] = "\t\tbind参数\t :" . json_encode($value['parmars']) . "\n";
+                $data[] = "\t\t执行耗时\t :" . json_encode($value['parmars']) . "\n";
                 $data[] = "\n";
             }
         }
@@ -131,7 +138,7 @@ class Log
         //程序执行顺序
         $data[] = "## 程序执行顺序\n```\n";
 
-        foreach ($this->debug as $value) {
+        foreach ($debug as $value) {
             $data[] = "\t\t文件位置:" . ($value[0] ?? '') . "\n";
             $data[] = "\t\t行数:" . ($value[1] ?? '') . "\n";
             $data[] = "\t\t描述:" . ($value[2] ?? '') . "\n";
@@ -173,6 +180,5 @@ class Log
         $data[] = "\n";
 
         file_put_contents($this->fileName, $data, LOCK_EX);
-        $data = [];
     }
 }
