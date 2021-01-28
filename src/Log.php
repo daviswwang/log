@@ -74,27 +74,27 @@ class Log
         $data[] = " - REAL_IP:\t\t" . ($_SERVER['X-REAL-IP'] ?? '') . "\n";
         $data[] = " - DATETIME:\t" . date('Y-m-d H:i:s') . "\n";
         $data[] = " - AGENT:\t\t" . ($_SERVER['HTTP_USER_AGENT'] ?? '') . "\n";
-        $data[] = " - Router:\t\t{$request->getRequestUri()}\n";
+        $data[] = " - Router:\t\t{$request->getPathInfo()}\n";
 
         $data[] = " \n\n\n\n";
         //一些路由结果，路由结果参数
 
         $data[] = "## 路由参数\n";
-//        $Params = $request->header();
-//        $data[] = " - Header请求参数:\t\t\n";
-//        if (!empty($Params)) {
-//            foreach ($Params as $k => $v) {
-//                if (is_array($v)) {
-//                    $data[] = " \t\t- {$k}中参数:\t\t\n";
-//                    foreach ($v as $kk => $item) {
-//                        if (is_array($item)) $item = json_encode($item, JSON_UNESCAPED_UNICODE);
-//                        $data[] = "\t\t\t\t- {$kk}\t{$item}\n";
-//                    }
-//                } else {
-//                    $data[] = "- {$k}\t{$v}\n";
-//                }
-//            }
-//        }
+        $Params = $request->getHeaders();
+        $data[] = " - Header请求参数:\t\t\n";
+        if (!empty($Params)) {
+            foreach ($Params as $k => $v) {
+                if (is_array($v)) {
+                    $data[] = " \t\t- {$k}中参数:\t\t\n";
+                    foreach ($v as $kk => $item) {
+                        if (is_array($item)) $item = json_encode($item, JSON_UNESCAPED_UNICODE);
+                        $data[] = "\t\t\t\t- {$kk}\t{$item}\n";
+                    }
+                } else {
+                    $data[] = "- {$k}\t{$v}\n";
+                }
+            }
+        }
 
         $data[] = "## 路由参数\n";
         $Params = $request->all();
@@ -129,7 +129,7 @@ class Log
             foreach ($mysqlDebug as $i => $value) {
                 $data[] = "\t\t执行时间\t:" . ($value['time']) . "\n";
                 $data[] = "\t\tsql\t:" . ($value['sql'] ?? '') . "\n";
-                $data[] = "\t\t执行耗时\t :" . json_encode($value['parmars']) . "\n";
+                $data[] = "\t\t执行结果\t :" . json_encode($value['parmars']) . "\n";
                 $data[] = "\n";
             }
         }
