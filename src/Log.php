@@ -91,18 +91,20 @@ class Log
 //        }
 
         $data[] = "## 路由参数\n";
-        $Params = $request->all();
+        $Params = $request->getParsedBody();
         $data[] = " - Request请求参数:\t\t\n";
         if (!empty($Params)) {
-            foreach ($Params as $k => $v) {
-                if (is_array($v)) {
-                    $data[] = " \t\t- {$k}中参数:\t\t\n";
-                    foreach ($v as $kk => $item) {
-                        if (is_array($item)) $item = json_encode($item, JSON_UNESCAPED_UNICODE);
-                        $data[] = "\t\t\t\t- {$kk}\t{$item}\n";
+            if (is_array($Params)) {
+                foreach ($Params as $k => $v) {
+                    if (is_array($v)) {
+                        $data[] = " \t\t- {$k}中参数:\t\t\n";
+                        foreach ($v as $kk => $item) {
+                            if (is_array($item)) $item = json_encode($item, JSON_UNESCAPED_UNICODE);
+                            $data[] = "\t\t\t\t- {$kk}\t{$item}\n";
+                        }
+                    } else {
+                        $data[] = "- {$k}\t{$v}\n";
                     }
-                } else {
-                    $data[] = "- {$k}\t{$v}\n";
                 }
             }
         }
