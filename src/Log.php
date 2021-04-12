@@ -68,7 +68,7 @@ class Log
         $data[] = " - REAL_IP:\t\t" . ($_SERVER['X-REAL-IP'] ?? '') . "\n";
         $data[] = " - DATETIME:\t" . date('Y-m-d H:i:s') . "\n";
         $data[] = " - AGENT:\t\t" . ($_SERVER['HTTP_USER_AGENT'] ?? '') . "\n";
-        $data[] = " - Router:\t\t{$request->getRequestUri()}\n";
+        $data[] = " - Router:\t\t{$request->fullUrl()}\n";
 
         $data[] = " \n\n\n\n";
         //一些路由结果，路由结果参数
