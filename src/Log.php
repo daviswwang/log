@@ -110,26 +110,26 @@ class Log
         }
 
         //执行时间 内存消耗
-        $data[] = "## 执行时间 内存消耗\n```\n";
+        $data[] = "## 执行时间(ms) 内存消耗\n```\n";
         $time = sprintf('% 9.3f', (microtime(true) - $starTime) * 1000);
         $memo = sprintf('% 9.3f', (memory_get_usage() - $starMemory) / 1024);
         $total = sprintf('% 9.3f', (memory_get_usage()) / 1024);
-        $data[] = "\t\tuTime\tuMem\t\ttMem\t\n";
+        $data[] = "\tuTime\t\tuMem\t\ttMem\t\n";
         $data[] = "  {$time}\t{$memo}\t{$total}\t\n```\n";
 
         var_dump($mysqlDebug);
 
-//        if (count($mysqlDebug)) {
-//            $slow = [];
-//            $data[] = "\n## Mysql 顺序：\n";
-//            $data[] = " - 当前共执行MYSQL：\t" . count($mysqlDebug) . " 次\n";
-//            foreach ($mysqlDebug as $i => $value) {
-//                $data[] = "\t\t执行时间\t:" . ($value['time']) . "\n";
-//                $data[] = "\t\tsql\t:" . ($value['sql'] ?? '') . "\n";
-//                $data[] = "\t\t执行结果\t :" . json_encode($value['parmars']) . "\n";
-//                $data[] = "\n";
-//            }
-//        }
+        if (is_array($mysqlDebug) && count($mysqlDebug)) {
+            $slow = [];
+            $data[] = "\n## Mysql 顺序：\n";
+            $data[] = " - 当前共执行MYSQL：\t" . count($mysqlDebug) . " 次\n";
+            foreach ($mysqlDebug as $i => $value) {
+                $data[] = "\t\t执行时间\t:" . ($value['time']) . "\n";
+                $data[] = "\t\tsql\t:" . ($value['sql'] ?? '') . "\n";
+                if (isset($value['parmars'])) $data[] = "\t\t执行结果\t :" . json_encode($value['parmars']) . "\n";
+                $data[] = "\n";
+            }
+        }
 
         //程序执行顺序
         $data[] = "## 程序执行顺序\n```\n";
