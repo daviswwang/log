@@ -38,7 +38,7 @@ class Log
             mkdir($filePath, 755, true);
         }
 
-        $fileName = $filePath . '/' . $userId . '_' . date('H-i-s') . '_' . mt_rand(100, 999) . '.md';
+        $fileName = $filePath . '/' . $userId . '_' . date('H-i-s') . '_' . mt_rand(100, 999) . '.log';
 
         Context::set('fileName', $fileName);
     }
