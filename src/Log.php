@@ -43,6 +43,22 @@ class Log
         Context::set('fileName', $fileName);
     }
 
+    public function start_debug($debug, $userId)
+    {
+        Context::set('add_debug', $debug);
+        Context::set('starTime', microtime(true));
+        Context::set('starMemory', memory_get_usage());
+
+        $filePath = BASE_PATH . '/runtime/logs/' . config('app_key');
+
+        if (!file_exists($filePath)) {
+            mkdir($filePath, 755, true);
+        }
+        $fileName = $filePath . '/' . $userId . '_' . date('H-i-s') . '_' . mt_rand(100, 999) . '.log';
+
+        Context::set('fileName', $fileName);
+    }
+
 
     /**
      * 保存
