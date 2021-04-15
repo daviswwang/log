@@ -49,7 +49,7 @@ class Log
         Context::set('starTime', microtime(true));
         Context::set('starMemory', memory_get_usage());
 
-        $filePath = BASE_PATH . '/runtime/logs/' . config('app_key');
+        $filePath = BASE_PATH . '/runtime/logs/' . config('app_name');
 
         if (!file_exists($filePath)) {
             mkdir($filePath, 755, true);
