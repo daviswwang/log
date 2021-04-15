@@ -166,26 +166,28 @@ class Log
             $data[] = "\n";
         }
 
+        if (!empty($response)) {
+            $data[] = "## 返回数据\n```\n";
 
-        $data[] = "## 返回数据\n```\n";
+            foreach ($response as $key => $value) {
 
-        foreach ($response as $key => $value) {
+                if (is_array($value) || is_object($value)) {
+                    $value = json_decode(json_encode($value), true);
 
-            if (is_array($value) || is_object($value)) {
-                $value = json_decode(json_encode($value), true);
-
-                foreach ($value as $k => $v) {
-                    if (is_array($v)) $v = json_encode($v, JSON_UNESCAPED_UNICODE);
-                    $data[] = " \t\t\t\t-{$k}\t{$v}\n";
+                    foreach ($value as $k => $v) {
+                        if (is_array($v)) $v = json_encode($v, JSON_UNESCAPED_UNICODE);
+                        $data[] = " \t\t\t\t-{$k}\t{$v}\n";
+                    }
+                } else {
+                    $data[] = "- {$key}\t{$value}\n";
                 }
-            } else {
-                $data[] = "- {$key}\t{$value}\n";
+                $data[] = "\n";
             }
-            $data[] = "\n";
+
+
+            $data[] = "\n```\n";
         }
 
-
-        $data[] = "\n```\n";
 
         $data[] = "\n";
 
