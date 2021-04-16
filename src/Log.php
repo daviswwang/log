@@ -35,7 +35,7 @@ class Log
         $filePath = BASE_PATH . '/runtime/logs/' . date('Y-m-d') . '/' . $shopCode;
 
         if (!file_exists($filePath)) {
-            mkdir($filePath, 755, true);
+            mkdir($filePath, 0777, true);   //给到777权限 不然filebeat 监听不到
         }
 
         $fileName = $filePath . '/' . $userId . '_' . date('H-i-s') . '_' . mt_rand(100, 999) . '.log';
@@ -52,7 +52,7 @@ class Log
         $filePath = BASE_PATH . '/runtime/logs/' . config('app_name');
 
         if (!file_exists($filePath)) {
-            mkdir($filePath, 755, true);
+            mkdir($filePath, 0777, true);
         }
         $fileName = $filePath . '/' . $userId . '_' . date('H-i-s') . '_' . mt_rand(100, 999) . '.log';
 
