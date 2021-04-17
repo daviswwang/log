@@ -43,17 +43,18 @@ class Log
         Context::set('fileName', $fileName);
     }
 
-    public function start_debug($debug, $userId)
+    public function start_debug($debug, $shopCode, $userId)
     {
         Context::set('add_debug', $debug);
         Context::set('starTime', microtime(true));
         Context::set('starMemory', memory_get_usage());
 
-        $filePath = BASE_PATH . '/runtime/logs/' . config('app_name');
+        $filePath = BASE_PATH . '/runtime/logs/' . date('Y-m-d') . '/' . $shopCode . '/' . config('app_name');
 
         if (!file_exists($filePath)) {
             mkdir($filePath, 0777, true);
         }
+
         $fileName = $filePath . '/' . $userId . '_' . date('H-i-s') . '_' . mt_rand(100, 999) . '.log';
 
         Context::set('fileName', $fileName);
